@@ -33,7 +33,7 @@ const Login = () => {
 
       console.log('✅ Connexion réussie :', response.data);
       setMessageErreur('');
-      navigate('/');
+      navigate('/Principe');
     } catch (error) {
       console.error('❌ Erreur de connexion :', error.response?.data || error.message);
       setMessageErreur(error.response?.data?.message || 'Une erreur est survenue lors de la connexion');

@@ -1,9 +1,10 @@
 import React from 'react';
-import Cart from '../components/Cart.jsx'; // تأكد من المسار الصحيح
+import Cart from '../components/Cart'; // ✔ تأكدنا من المسار وما زدناش .jsx لأنه غير ضروري
 
 const CartPage = () => {
   return (
-    <div className="container mx-auto mt-6">
+    <div className="container py-5">
+      <h2 className="text-center mb-5 fw-bold text-dark">Page Panier</h2>
       <Cart />
     </div>
   );

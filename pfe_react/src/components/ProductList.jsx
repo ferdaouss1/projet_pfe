@@ -1,9 +1,11 @@
-import { useEffect,useState } from 'react';
-import { useCart } from '../components/CartContext';  // استيراد السياق
+import { useEffect, useState } from 'react';
+import { useCart } from '../context/CartContext'; // استيراد السياق
+import { useNavigate } from 'react-router-dom'; // باش ندوزو للبانير
 
 const ProductList = () => {
   const [produits, setProduits] = useState([]);
-  const { addToCart } = useCart();  // الوصول إلى دالة إضافة المنتجات للسلة
+  const { addToCart } = useCart();  // دالة الإضافة للسلة
+  const navigate = useNavigate();   // التنقل بين الصفحات
 
   // تحميل المنتجات من API
   useEffect(() => {
@@ -39,7 +41,10 @@ const ProductList = () => {
                 <div className="mt-auto text-center">
                   <button
                     className="btn btn-primary w-100"
-                    onClick={() => addToCart(produit)} // إضافة المنتج للسلة عند الضغط
+                    onClick={() => {
+                      addToCart(produit);   // نضيفو المنتج للسلة
+                      navigate('/Cart');  // ننتاقل للصفحة ديال البانير
+                    }}
                   >
                     Ajouter au panier
                   </button>

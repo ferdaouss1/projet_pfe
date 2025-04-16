@@ -33,6 +33,7 @@ const Header = () => {
           <li><Link to="/profile" style={linkStyle}>👤 Profile</Link></li>
           <li><Link to="/login" style={linkStyle}>🔐 Login</Link></li>
           <li><Link to="/register" style={linkStyle}>📝 Register</Link></li>
+          <li><Link to="/Principe" style={linkStyle}>📝 Principe</Link></li>
         </ul>
       </nav> 
       

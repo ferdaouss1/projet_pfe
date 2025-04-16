@@ -4,14 +4,59 @@ const PaymentForm = ({ amount }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simuler succès paiement
-    setIsPaymentSuccess(true);
+  
+    // إرسال البيانات إلى الـ backend
+    fetch('https://your-backend-api.com/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fullName,
+        phone,
+        cardNumber,
+        expiryDate,
+        cvv,
+        amount,
+        statut: 'Succès', // حالة الدفع
+        date_paiement: new Date().toISOString(), // تاريخ الدفع
+      }),
+    })
+      .then((response) => {
+        // التحقق إذا كانت الاستجابة ناجحة
+        if (!response.ok) {
+          throw new Error('حدث خطأ في الخادم، يرجى المحاولة مرة أخرى.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          alert('تم الدفع بنجاح!');
+          // إعادة تعيين الحقول بعد الدفع الناجح
+          setCardNumber('');
+          setExpiryDate('');
+          setCvv('');
+          setFullName('');
+          setPhone('');
+          setIsPaymentSuccess(true);
+        } else {
+          // إذا كانت الاستجابة من الخادم لا تشير إلى نجاح الدفع
+          alert('حدث خطأ في الدفع، يرجى التحقق من بياناتك.');
+        }
+      })
+      .catch((error) => {
+        // عرض رسالة خطأ مع تفاصيل إضافية
+        console.error('الخطأ:', error);
+        alert(error.message || 'حدث خطأ، يرجى المحاولة مرة أخرى.');
+      });
   };
-
+  
   return (
     <div className="container py-5">
       <div className="row justify-content-center ">
@@ -26,6 +71,32 @@ const PaymentForm = ({ amount }) => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit}>
+                  {/* Nom complet */}
+                  <div className="mb-3">
+                    <label className="form-label">Nom complet</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Votre nom complet"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {/* Téléphone */}
+                  <div className="mb-3">
+                    <label className="form-label">Téléphone</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      placeholder="06 00 00 00 00"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
+
                   {/* Numéro de carte */}
                   <div className="mb-3">
                     <label className="form-label">Numéro de carte</label>
