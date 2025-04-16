@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const PaymentForm = ({ amount }) => {
+const PaymentForm = ({ amount, reservationId }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -10,53 +10,40 @@ const PaymentForm = ({ amount }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // إرسال البيانات إلى الـ backend
-    fetch('https://your-backend-api.com/checkout', {
+
+    fetch('http://127.0.0.1:8000/api/paiements', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fullName,
-        phone,
-        cardNumber,
-        expiryDate,
-        cvv,
-        amount,
-        statut: 'Succès', // حالة الدفع
-        date_paiement: new Date().toISOString(), // تاريخ الدفع
+        reservation_id: reservationId,
+        montant: amount,
+        date_paiement: new Date().toISOString().split('T')[0], // تاريخ اليوم بصيغة YYYY-MM-DD
+        statut: 'payé',
       }),
     })
       .then((response) => {
-        // التحقق إذا كانت الاستجابة ناجحة
         if (!response.ok) {
-          throw new Error('حدث خطأ في الخادم، يرجى المحاولة مرة أخرى.');
+          throw new Error('Échec de la requête');
         }
         return response.json();
       })
       .then((data) => {
-        if (data.success) {
-          alert('تم الدفع بنجاح!');
-          // إعادة تعيين الحقول بعد الدفع الناجح
-          setCardNumber('');
-          setExpiryDate('');
-          setCvv('');
-          setFullName('');
-          setPhone('');
-          setIsPaymentSuccess(true);
-        } else {
-          // إذا كانت الاستجابة من الخادم لا تشير إلى نجاح الدفع
-          alert('حدث خطأ في الدفع، يرجى التحقق من بياناتك.');
-        }
+        alert('✅ تم الدفع بنجاح!');
+        setCardNumber('');
+        setExpiryDate('');
+        setCvv('');
+        setFullName('');
+        setPhone('');
+        setIsPaymentSuccess(true);
       })
       .catch((error) => {
-        // عرض رسالة خطأ مع تفاصيل إضافية
-        console.error('الخطأ:', error);
-        alert(error.message || 'حدث خطأ، يرجى المحاولة مرة أخرى.');
+        console.error('Erreur:', error);
+        alert('❌ وقع خطأ أثناء الدفع، المرجو المحاولة من جديد.');
       });
   };
-  
+
   return (
     <div className="container py-5">
       <div className="row justify-content-center ">

@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         // database/migrations/xxxx_xx_xx_create_reservations_table.php
-            Schema::create('reservations', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
-                $table->foreignId('voyage_id')->constrained('voyages')->onDelete('cascade');
-                $table->date('date');
-                $table->timestamps();
-            });
+        Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('voyage_id')->constrained('voyages')->onDelete('cascade');
+            $table->date('date');
+            $table->timestamps();
+        });
+        
 
     }
 

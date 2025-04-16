@@ -30,9 +30,13 @@ Route::apiResource('paiements', PaiementController::class);
 Route::apiResource('transactions', TransactionController::class);
 Route::apiResource('utilisateurs', UtilisateurController::class);
 
+ // هادي ضرورية
+
+
 // Auth routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/checkout', [PaiementController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
